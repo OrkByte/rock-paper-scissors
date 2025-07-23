@@ -11,7 +11,7 @@ function playGame() {
   }
 
   if (humanScore === computerScore) {
-    output += "Draw";
+    output += "Draw!";
   } else {
     output += humanScore > computerScore ? "You won!" : "Computer won!"
   }
