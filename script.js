@@ -1,14 +1,46 @@
+// ui
+const btnRock = document.querySelector("#btnRock");
+const btnScissors = document.querySelector("#btnScissors");
+const btnPaper = document.querySelector("#btnPaper");
+const divResultRound = document.querySelector("#divResultRound");
+const divResultFinal = document.querySelector("#divResultFinal");
+const divHumanScore = document.querySelector("#divHumanScore");
+const divComputerScore = document.querySelector("#divComputerScore");
+
+btnRock.addEventListener("click", (e) => playGame(e.target.innerText));
+btnScissors.addEventListener("click", (e) => playGame(e.target.innerText));
+btnPaper.addEventListener("click", (e) => playGame(e.target.innerText));
+
+// game logic
 let humanScore = 0;
 let computerScore = 0;
+let currentRound = 1;
+const TOTAL_ROUNDS = 5;
 
-function playGame() {
-  let output = "Final result: ";
-
-  for (let i = 1; i < 6; i++) {
-    const computerChoice = getComputerChoice();
-    const humanChoice = getHumanChoice();
-    playRound(computerChoice, humanChoice);
+function playGame(humanChoice) {
+  const computerChoice = getComputerChoice();
+  const resultRound = playRound(computerChoice, humanChoice);
+  
+  if (currentRound <= TOTAL_ROUNDS) {
+    displayResultRound(resultRound);
+  } 
+  
+  if (currentRound === TOTAL_ROUNDS) {
+    displayResultFinal();
+    currentRound = 0;
   }
+
+  currentRound += 1;
+}
+
+function displayResultRound(resultRound) {
+  divResultRound.innerText = `Round ${currentRound}: ${resultRound}`;
+  divComputerScore.innerText = "Computer score: " + computerScore;
+  divHumanScore.innerText = "Human score: " + humanScore;
+}
+
+function displayResultFinal() {
+  let output = "Final result: ";
 
   if (humanScore === computerScore) {
     output += "Draw!";
@@ -16,7 +48,7 @@ function playGame() {
     output += humanScore > computerScore ? "You won!" : "Computer won!"
   }
 
-  printResult(output);
+  divResultFinal.innerText = output;
 }
 
 function playRound(computerChoice, humanChoice) {
@@ -32,12 +64,8 @@ function playRound(computerChoice, humanChoice) {
     humanScore++;
   }
 
-  printResult(output);
+  return output;
 }
-
-function printResult(result) {
-  console.log(result);
-} 
 
 function hasComputerWon(computerChoice, humanChoice) {
   return (computerChoice === "Scissors" && humanChoice === "Paper") || 
@@ -57,11 +85,3 @@ function getComputerChoice() {
     ? "Rock" : randomNumber === 2 
     ? "Scissors" : "Paper"
 }
-
-function getHumanChoice() {
-  let humanChoice = prompt("Enter your choice: ").toLowerCase();
-  let firstLetter = humanChoice[0];
-  return humanChoice.replace(firstLetter, firstLetter.toUpperCase());
-}
-
-playGame();
