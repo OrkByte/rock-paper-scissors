@@ -20,6 +20,10 @@ const TOTAL_ROUNDS = 5;
 function playGame(humanChoice) {
   const computerChoice = getComputerChoice();
   const resultRound = playRound(computerChoice, humanChoice);
+
+  if (currentRound === 1) { 
+    divResultFinal.innerText = ""; // remove final result when new game starts
+  }
   
   if (currentRound <= TOTAL_ROUNDS) {
     displayResultRound(resultRound);
